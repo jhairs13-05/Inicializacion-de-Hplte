@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto estadístico — Producción terrestre de petróleo y gas en Brasil (enero 2023)</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Aquí enlazas tu CSS: <link rel="stylesheet" href="css/estilos.css"> -->
+</head>
+<body id="inicio">
+
+    <dialog id="aviso">
+        <h2>Importante</h2>
+        <p>Este sitio es un proyecto exclusivamente académico. Los datos provienen del archivo público de producción por pozo (campos terrestres) de enero de 2023.</p>
+        <h3>Fuentes de datos</h3>
+        <ul>
+            <li>ANP — Agência Nacional do Petróleo, Gás Natural e Biocombustíveis: producción de petróleo y gas natural por pozo (<cite>2023_01_producao_Terra.csv</cite>).</li>
+        </ul>
+        <button type="button" id="aviso-cerrar">Entendido</button>
+    </dialog>
+
+    <header id="cabecera">
+        <button type="button" id="menu-boton" aria-expanded="true" aria-controls="menu">Cerrar menú</button>
+        <nav id="menu" aria-label="Navegación principal">
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#planteamiento">Planteamiento</a></li>
+                <li><a href="#mapa">Mapa</a></li>
+                <li><a href="#objetivos">Objetivos</a></li>
+                <li><a href="#descriptiva">Descriptiva</a></li>
+                <li><a href="#inferencial">Inferencial</a></li>
+                <li><a href="#regresion">Regresión</a></li>
+                <li><a href="#machine-learning">Machine Learning</a></li>
+                <li><a href="#conclusiones">Conclusiones</a></li>
+                <li><a href="#recomendaciones">Recomendaciones</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="hero">
+            <p>Proyecto académico de Estadística</p>
+            <h1>Análisis estadístico de la producción terrestre de petróleo y gas en Brasil</h1>
+            <p>Del subsuelo a la estadística: producción, agua y gas de más de cinco mil registros de pozos en enero de 2023.</p>
+            <p>
+                <a href="#mapa">Ver ubicación geográfica</a>
+                <a href="#planteamiento">Ir al planteamiento</a>
+            </p>
+            <ul id="resumen-datos">
+                <li><strong id="kpi-registros">—</strong> registros</li>
+                <li><strong id="kpi-pozos">—</strong> códigos de pozo</li>
+                <li><strong id="kpi-campos">—</strong> campos</li>
+                <li><strong id="kpi-operadores">—</strong> operadores</li>
+                <li><strong id="kpi-estados">—</strong> estados</li>
+            </ul>
+        </section>
+
+        <!-- 1. Planteamiento del problema -->
+        <section id="planteamiento">
+            <h2>1. Planteamiento del problema</h2>
+            <p>
+                La producción terrestre de hidrocarburos en Brasil se reporta pozo por pozo y mes a mes:
+                petróleo, condensado, gas natural, agua, tiempo de producción y propiedades del fluido.
+                Con tantos registros y tantas variables, resulta difícil saber cómo se distribuye la producción,
+                qué tan dispersos son los caudales y qué relaciones existen entre ellos sin un análisis estadístico.
+            </p>
+            <p>
+                Este proyecto toma el archivo de enero de 2023 para describir el comportamiento de la producción
+                terrestre, ajustar modelos de probabilidad y estudiar la relación entre variables como petróleo, gas,
+                agua y tiempo de producción.
+            </p>
+        </section>
+
+        <!-- 2. Mapa: ubicación geográfica -->
+        <section id="mapa">
+            <h2>2. Mapa: ubicación geográfica</h2>
+            <p>
+                Los registros se concentran en nueve estados. Cada círculo es un estado productor; su tamaño depende de la
+                variable elegida. Las posiciones son aproximadas (centro del área productora). Toca un círculo para ver el detalle.
+            </p>
+
+            <fieldset id="mapa-controles">
+                <legend>Variable del mapa</legend>
+                <label><input type="radio" name="mapa-metrica" value="registros" checked> Registros</label>
+                <label><input type="radio" name="mapa-metrica" value="petroleo"> Petróleo (bbl/día)</label>
+                <label><input type="radio" name="mapa-metrica" value="gas"> Gas total (Mm³/día)</label>
+                <label><input type="radio" name="mapa-metrica" value="agua"> Agua (bbl/día)</label>
+            </fieldset>
+
+            <div id="mapa-brasil" style="height: 480px;" role="application" aria-label="Mapa interactivo de estados productores"></div>
+
+            <h3>Estados y cuencas</h3>
+            <p id="mapa-detalle">Selecciona un estado en el mapa o en la lista.</p>
+            <ul id="mapa-lista"></ul>
+        </section>
+
+        <!-- 3. Objetivos -->
+        <section id="objetivos">
+            <h2>3. Objetivos</h2>
+
+            <h3>Objetivo general</h3>
+            <p>
+                Analizar estadísticamente la producción terrestre de petróleo y gas natural en Brasil durante
+                enero de 2023, mediante estadística descriptiva, inferencial y modelos de relación entre variables.
+            </p>
+
+            <h3>Objetivos específicos</h3>
+            <ol>
+                <li>Describir la distribución de la producción mediante tablas, gráficos e indicadores de tendencia central, dispersión y forma.</li>
+                <li>Ajustar modelos de probabilidad a las variables de producción y obtener estimaciones e intervalos de confianza.</li>
+                <li>Estimar la relación entre variables de producción (petróleo, gas, agua y tiempo de producción) mediante regresión y predicción.</li>
+            </ol>
+        </section>
+
+        <!-- 4. Metodología estadística -->
+        <section id="metodologia">
+            <h2>4. Metodología estadística</h2>
+
+            <section id="descriptiva">
+                <h3>4.1. Estadística descriptiva</h3>
+
+                <section id="poblacion-individuo">
+                    <h4>4.1.1. Población e individuo</h4>
+
+                    <h5>Población</h5>
+                    <p>
+                        Conjunto de registros de producción incluidos en <cite>2023_01_producao_Terra.csv</cite>,
+                        correspondientes a enero de 2023 y distribuidos en nueve estados de Brasil.
+                        Es una población finita de <strong>5.471 registros</strong>.
+                    </p>
+                    <p>
+                        <var>P</var> = { <var>x</var><sub>1</sub>, <var>x</var><sub>2</sub>, …, <var>x</var><sub>5471</sub> },
+                        con <var>N</var> = 5.471.
+                    </p>
+
+                    <h5>Individuo o unidad de observación</h5>
+                    <p>
+                        Un registro de producción de un pozo asociado a un campo durante enero de 2023
+                        (una fila de datos del archivo).
+                    </p>
+                    <p><var>x</var><sub>i</sub> ∈ <var>P</var>, para <var>i</var> = 1, 2, …, 5471.</p>
+
+                    <aside>
+                        <h5>Aclaración</h5>
+                        <p>
+                            Los 5.471 registros no equivalen a 5.471 pozos distintos: el archivo contiene 5.308 códigos de pozo
+                            diferentes y algunos aparecen asociados a más de un campo. Por eso la unidad de observación es el registro.
+                        </p>
+                    </aside>
+
+                    <h5>Explora la población</h5>
+                    <p>Elige cómo agrupar los registros y qué variable representar.</p>
+
+                    <form id="grafico-controles" onsubmit="return false;">
+                        <label>Agrupar por
+                            <select id="grafico-grupo">
+                                <option value="estado">Estado</option>
+                                <option value="cuenca">Cuenca</option>
+                                <option value="operador">Operador (10 principales)</option>
+                            </select>
+                        </label>
+                        <label>Variable
+                            <select id="grafico-metrica">
+                                <option value="registros">Número de registros</option>
+                                <option value="petroleo">Petróleo (bbl/día)</option>
+                                <option value="gas">Gas total (Mm³/día)</option>
+                                <option value="agua">Agua (bbl/día)</option>
+                            </select>
+                        </label>
+                        <label>Tipo de gráfico
+                            <select id="grafico-tipo">
+                                <option value="bar">Barras</option>
+                                <option value="doughnut">Dona</option>
+                                <option value="pie">Pastel</option>
+                            </select>
+                        </label>
+                    </form>
+
+                    <figure>
+                        <div style="position: relative; height: 420px;">
+                            <canvas id="grafico-poblacion" role="img" aria-label="Gráfico interactivo de la población de registros"></canvas>
+                        </div>
+                        <figcaption id="grafico-leyenda"></figcaption>
+                    </figure>
+
+                    <table id="tabla-poblacion">
+                        <caption id="tabla-titulo">Población por estado</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Categoría</th>
+                                <th scope="col">Registros</th>
+                                <th scope="col">% del total</th>
+                                <th scope="col">Petróleo (bbl/día)</th>
+                                <th scope="col">Gas total (Mm³/día)</th>
+                                <th scope="col">Agua (bbl/día)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <p>Petróleo, gas y agua son sumas de los caudales diarios reportados en cada registro.</p>
+                </section>
+
+                <section id="en-construccion-descriptiva">
+                    <h4>4.1.2 – 4.1.7</h4>
+                    <p>En construcción: muestra, variables, TDFs, GDFs, indicadores y resumen descriptivo se publicarán a medida que avance el análisis.</p>
+                </section>
+            </section>
+
+            <section id="inferencial">
+                <h3>4.2. Estadística inferencial</h3>
+                <p>En construcción.</p>
+            </section>
+
+            <section id="regresion">
+                <h3>4.3. Relación entre variables</h3>
+                <h4>4.3.1. Regresión</h4>
+                <p>En construcción.</p>
+            </section>
+
+            <section id="machine-learning">
+                <h4>4.3.2. Machine Learning y 4.3.3. Series de tiempo</h4>
+                <p>En construcción.</p>
+            </section>
+        </section>
+
+        <section id="conclusiones">
+            <h2>5. Conclusiones</h2>
+            <p>En construcción: se publicarán al finalizar el análisis.</p>
+        </section>
+
+        <section id="recomendaciones">
+            <h2>6. Recomendaciones</h2>
+            <p>En construcción: se publicarán al finalizar el análisis.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="#inicio">Volver al inicio</a></p>
+        <p>Proyecto académico de Estadística · © 2026</p>
+        <p>Herramientas usadas: HTML, JavaScript, <a href="https://www.chartjs.org/">Chart.js</a> y <a href="https://leafletjs.com/">Leaflet</a>.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/datos.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
